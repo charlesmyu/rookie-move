@@ -44,25 +44,36 @@ class Board():
             random.shuffle(self._free_cols)
 
     def __str__(self):
-        final = '\n\u272f'
-        final += '-' * (self._ncol*2 + 1)
-        final += '\u272f\n'
+        '''
+        Override __str__ method to allow user-friendly viewing of chess board
+
+        :returns: Human readable string with image and coordinates of rooks on chess board
+        '''
+        corner = '\u272f'
+        no_rook = '\u00B7'
+        white_rook = '\u265c'
+        black_rook = '\u2656'
+
+        final = '\n' + corner + ' ' + '-' * (self._ncol*2) + corner + '\n'
 
         for row in reversed(self._rows):
             final += '| '
             for col in range(self._ncol):
-                if not row or row[0] != col:
-                    final += '\u00B7 '
-                elif row[1] == 'user':
-                    final += '\u265c '
-                elif row[1] == 'program':
-                    final += '\u2656 '
+                pos = no_rook
+                if row and row[0] == col:
+                    if row[1] == 'user':
+                        pos = white_rook
+                    elif row[1] == 'program':
+                        pos = black_rook
+                final += pos + ' '
             final += '|\n'
 
-        final += '\u272f'
-        final += '-' * (self._ncol*2 + 1)
-        final += '\u272f\n'
+        rook_coordinates = self._get_friendly_coordinates()
 
+        final += corner + ' ' + '-' * (self._ncol*2) + corner + '\n\n'
+        final += 'User Initialized Rooks (White): ' + str(rook_coordinates['user'])[1:-1] + '\n'
+        final += 'Program Generated Rooks (Black): ' + str(rook_coordinates['program'])[1:-1] + '\n'
+        
         return final
 
     def generate_rook(self) -> bool:
@@ -142,4 +153,16 @@ class Board():
             rows_used.add(position[1])
         
         return True
+
+    def _get_friendly_coordinates(self):
+        rook_coordinates = {
+            'user': [],
+            'program': []
+        }
+
+        for idx, row in enumerate(self._rows):
+            if row:
+                rook_coordinates[row[1]].append((idx, row[0]))
+
+        return rook_coordinates
 
