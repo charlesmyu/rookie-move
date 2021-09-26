@@ -58,6 +58,14 @@ class Board():
 
         return True
 
+    def num_rooks_left(self) -> int:
+        '''
+        Returns number of rooks that can be generated.
+
+        :return: int representing number of rooks that can still be generated
+        '''
+        return min(len(self._free_rows), len(self._free_cols))
+
     def get_rook_positions(self) -> list:
         '''
         Returns positions of rooks in a list representing each column, with information about whether user or program added rook.

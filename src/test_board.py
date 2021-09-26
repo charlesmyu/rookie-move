@@ -2,9 +2,15 @@ import unittest
 import random
 from board import Board
 
+def init_standard(algo: str = 'random', nrow: int = 8, ncol: int = 8) -> Board:
+    '''
+    Use as standard method to generate new board with default rooks at (1, 2), (5, 7), (3, 6)
+    '''
+    return Board([(1, 2), (5, 7), (3, 6)], algo=algo, nrow=nrow, ncol=ncol)
+
 class TestInit(unittest.TestCase):
     def test_init(self):
-        board = Board([(1, 2), (5, 7), (3, 6)])
+        board = init_standard()
         self.assertListEqual(board.get_rook_positions(), [None, None, (1, 'user'), None, None, None, (3, 'user'), (5, 'user')])
         self.assertCountEqual(board.get_free_cols(), [0, 2, 4, 6, 7])
         self.assertCountEqual(board.get_free_rows(), [0, 1, 3, 4, 5])
@@ -25,11 +31,11 @@ class TestInit(unittest.TestCase):
 
     def test_init_invalid_nrow_ncol(self):
         with self.assertRaises(ValueError):
-            board = Board([(1, 2), (5, 7), (3, 6)], nrow=0)
+            board = init_standard(nrow=0)
 
     def test_init_invalid_ncol(self):
         with self.assertRaises(ValueError):
-            board = Board([(1, 2), (5, 7), (3, 6)], ncol=0)
+            board = init_standard(ncol=0)
 
     def test_init_rooks_out_of_row_range(self):
         with self.assertRaises(ValueError):
@@ -58,14 +64,14 @@ class TestInit(unittest.TestCase):
             board = Board(algo='abcd')
 
     def test_init_ordered_algo(self):
-        board = Board([(1, 2), (5, 7), (3, 6)], algo='ordered')
+        board = init_standard(algo='ordered')
         self.assertListEqual(board.get_rook_positions(), [None, None, (1, 'user'), None, None, None, (3, 'user'), (5, 'user')])
         self.assertListEqual(board.get_free_cols(), [0, 2, 4, 6, 7])
         self.assertListEqual(board.get_free_rows(), [0, 1, 3, 4, 5])
 
     def test_init_random_algo(self):
         random.seed(2021)
-        board = Board([(1, 2), (5, 7), (3, 6)], algo='random')
+        board = init_standard(algo='random')
         self.assertListEqual(board.get_rook_positions(), [None, None, (1, 'user'), None, None, None, (3, 'user'), (5, 'user')])
         self.assertListEqual(board.get_free_cols(), [2, 0, 4, 7, 6])
         self.assertListEqual(board.get_free_rows(), [1, 5, 0, 3, 4])
@@ -73,7 +79,7 @@ class TestInit(unittest.TestCase):
 class TestGenerateRook(unittest.TestCase):
     def test_generate(self):
         random.seed(2021)
-        board = Board([(1, 2), (5, 7), (3, 6)])
+        board = init_standard()
         res = board.generate_rook()
 
         self.assertEqual(res, True)
@@ -105,7 +111,7 @@ class TestGenerateRook(unittest.TestCase):
 
     def test_generate_random(self):
         random.seed(2021)
-        board = Board([(1, 2), (5, 7), (3, 6)], algo='random')
+        board = init_standard(algo='random')
         res = board.generate_rook()
 
         self.assertEqual(res, True)
@@ -114,10 +120,26 @@ class TestGenerateRook(unittest.TestCase):
         self.assertListEqual(board.get_free_rows(), [1, 5, 0, 3])
 
     def test_generate_ordered(self):
-        board = Board([(1, 2), (5, 7), (3, 6)], algo='ordered')
+        board = init_standard(algo='ordered')
         res = board.generate_rook()
 
         self.assertEqual(res, True)
         self.assertListEqual(board.get_rook_positions(), [None, None, (1, 'user'), None, None, (7, 'program'), (3, 'user'), (5, 'user')])
         self.assertCountEqual(board.get_free_cols(), [0, 2, 4, 6])
         self.assertCountEqual(board.get_free_rows(), [0, 1, 3, 4])
+
+class TestNumRooksLeft(unittest.TestCase):
+    def test_num_rooks_left(self):
+        board = init_standard()
+        self.assertEqual(board.num_rooks_left(), 5)
+
+    def test_num_rooks_left_none_left(self):
+        board = init_standard()
+        for i in range(5):
+            board.generate_rook()
+        self.assertEqual(board.num_rooks_left(), 0)
+
+    def test_num_rooks_left_small_board(self):
+        board = Board([(1, 2), (2, 1), (3, 3)], nrow=4, ncol=4)
+        res = board.generate_rook()
+        self.assertEqual(board.num_rooks_left(), 0)
