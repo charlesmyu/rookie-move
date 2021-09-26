@@ -54,7 +54,9 @@ class Board():
         white_rook = '\u265c'
         black_rook = '\u2656'
 
-        final = '\n' + corner + ' ' + '-' * (self._ncol*2) + corner + '\n'
+        border = corner + ' ' + '-' * (self._ncol*2) + corner
+
+        final = '\n' + border + '\n'
 
         for row in reversed(self._rows):
             final += '| '
@@ -70,9 +72,9 @@ class Board():
 
         rook_coordinates = self._get_friendly_coordinates()
 
-        final += corner + ' ' + '-' * (self._ncol*2) + corner + '\n\n'
-        final += 'User Initialized Rooks (White): ' + str(rook_coordinates['user'])[1:-1] + '\n'
-        final += 'Program Generated Rooks (Black): ' + str(rook_coordinates['program'])[1:-1] + '\n'
+        final += border + '\n\n'
+        final += 'User Initialized Rooks (White): ' + ', '.join(map(str, rook_coordinates['user'])) + '\n'
+        final += 'Program Generated Rooks (Black): ' + ', '.join(map(str, rook_coordinates['program'])) + '\n'
         
         return final
 
@@ -155,6 +157,12 @@ class Board():
         return True
 
     def _get_friendly_coordinates(self):
+        '''
+        Obtain coordinates of user and program placed rooks, and return in lists of ordered pairs.
+
+        :return: Map containing two keys, 'user' and 'program', which each contain a list of their corresponding ordered pairs
+            representing the location of their rooks
+        '''
         rook_coordinates = {
             'user': [],
             'program': []
@@ -162,7 +170,12 @@ class Board():
 
         for idx, row in enumerate(self._rows):
             if row:
-                rook_coordinates[row[1]].append((idx, row[0]))
+                rook_coordinates[row[1]].append((row[0], idx))
+
+        if len(rook_coordinates['user']) == 0:
+            rook_coordinates['user'] = ['None']
+        if len(rook_coordinates['program']) == 0:
+            rook_coordinates['program'] = ['None']
 
         return rook_coordinates
 

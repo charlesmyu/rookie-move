@@ -143,3 +143,45 @@ class TestNumRooksLeft(unittest.TestCase):
         board = Board([(1, 2), (2, 1), (3, 3)], nrow=4, ncol=4)
         res = board.generate_rook()
         self.assertEqual(board.num_rooks_left(), 0)
+
+class TestPrint(unittest.TestCase):
+    def test_print_empty_board(self):
+        expected = '\n\u272f --------\u272f\n| \u00B7 \u00B7 \u00B7 \u00B7 |\n| '\
+            '\u00B7 \u00B7 \u00B7 \u00B7 |\n| \u00B7 \u00B7 \u00B7 \u00B7 |\n| '\
+            '\u00B7 \u00B7 \u00B7 \u00B7 |\n\u272f --------\u272f\n\nUser Initia'\
+            'lized Rooks (White): None\nProgram Generated Rooks (Black): None\n'
+
+        board = Board(ncol = 4, nrow = 4)
+        self.assertEqual(str(board), expected)
+
+    def test_print_full_board_users(self):
+        expected = '\n\u272f --------\u272f\n| \u00B7 \u00B7 \u00B7 \u265c |\n| '\
+            '\u00B7 \u00B7 \u265c \u00B7 |\n| \u00B7 \u265c \u00B7 \u00B7 |\n| '\
+            '\u265c \u00B7 \u00B7 \u00B7 |\n\u272f --------\u272f\n\nUser Initia'\
+            'lized Rooks (White): (0, 0), (1, 1), (2, 2), (3, 3)\nProgram Genera'\
+            'ted Rooks (Black): None\n'
+
+        board = Board([(0, 0), (1, 1), (2, 2), (3, 3)], ncol = 4, nrow = 4)
+        self.assertEqual(str(board), expected)
+
+    def test_print_full_board_program(self):
+        expected = '\n\u272f --------\u272f\n| \u00B7 \u00B7 \u00B7 \u2656 |\n| '\
+            '\u00B7 \u00B7 \u2656 \u00B7 |\n| \u00B7 \u2656 \u00B7 \u00B7 |\n| '\
+            '\u2656 \u00B7 \u00B7 \u00B7 |\n\u272f --------\u272f\n\nUser Initia'\
+            'lized Rooks (White): None\nProgram Generated Rooks (Black): (0, 0),'\
+            ' (1, 1), (2, 2), (3, 3)\n'
+
+        board = Board(ncol = 4, nrow = 4, algo='ordered')
+        for i in range(4):
+            board.generate_rook()
+        self.assertEqual(str(board), expected)
+
+    def test_print(self):
+        expected = '\n\u272f --------\u272f\n| \u265c \u00B7 \u00B7 \u00B7 |\n| '\
+            '\u00B7 \u00B7 \u00B7 \u2656 |\n| \u00B7 \u00B7 \u00B7 \u00B7 |\n| '\
+            '\u00B7 \u00B7 \u00B7 \u00B7 |\n\u272f --------\u272f\n\nUser Initia'\
+            'lized Rooks (White): (0, 3)\nProgram Generated Rooks (Black): (3, 2)\n'
+
+        board = Board([(0, 3)], ncol = 4, nrow = 4, algo='ordered')
+        board.generate_rook()
+        self.assertEqual(str(board), expected)
