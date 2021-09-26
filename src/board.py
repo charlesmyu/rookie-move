@@ -186,6 +186,12 @@ class Board():
 
     @staticmethod
     def _chess_to_pair(chess_square: str) -> tuple:
+        '''
+        Converts chess notation to ordered pair. 
+
+        :param chess_square: string containing chess notation of a square on the chess board
+        :return: tuple containing ordered pair of passed location
+        '''
         col = ord(chess_square[0]) - 97
         row = int(chess_square[1:]) - 1
 
@@ -193,6 +199,12 @@ class Board():
 
     @staticmethod
     def _pair_to_chess(ordered_pair: tuple) -> str:
+        '''
+        Converts ordered pair to chess notation.
+
+        :param ordered_pair: ordered pair to be converted
+        :return: string containing location in chess notation
+        '''
         col = chr(ordered_pair[0] + 97)
         row = ordered_pair[1] + 1
 
