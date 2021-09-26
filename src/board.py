@@ -12,6 +12,7 @@ class Board():
                 If no rook at row, value is None. 
             free_rows: queue representing all rows not currently occupied by a rook
             free_cols: queue representing all columns not currently occupied by a rook
+            ncol: number of columns on board
 
         :param initial_rooks: initial placement of rooks represented as a list of tuples that are ordered 
             pairs (col, row), indexed by 0 from bottom left. Placements must not collide.
@@ -30,6 +31,7 @@ class Board():
         self._rows = [None]*nrow 
         self._free_rows = list(range(nrow))
         self._free_cols = list(range(ncol))
+        self._ncol = ncol
 
         # Add initial_rooks into instance variables, remove from queues
         for position in initial_rooks:
@@ -40,6 +42,28 @@ class Board():
         if algo == 'random':
             random.shuffle(self._free_rows)
             random.shuffle(self._free_cols)
+
+    def __str__(self):
+        final = '\n\u272f'
+        final += '-' * (self._ncol*2 + 1)
+        final += '\u272f\n'
+
+        for row in reversed(self._rows):
+            final += '| '
+            for col in range(self._ncol):
+                if not row or row[0] != col:
+                    final += '\u00B7 '
+                elif row[1] == 'user':
+                    final += '\u265c '
+                elif row[1] == 'program':
+                    final += '\u2656 '
+            final += '|\n'
+
+        final += '\u272f'
+        final += '-' * (self._ncol*2 + 1)
+        final += '\u272f\n'
+
+        return final
 
     def generate_rook(self) -> bool:
         '''
