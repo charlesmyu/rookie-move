@@ -51,7 +51,7 @@ class Board():
         '''
         Override __str__ method to allow user-friendly viewing of chess board
 
-        :returns: Human readable string with image and coordinates of rooks on chess board
+        :returns: Human readable string with image and locations of rooks in chess notation
         '''
         corner = '\u272f'
         no_rook = '\u00B7'
@@ -133,6 +133,29 @@ class Board():
         '''
         return self._free_cols
 
+    def _get_friendly_coordinates(self):
+        '''
+        Obtain coordinates of user and program placed rooks.
+
+        :return: Map containing two keys, 'user' and 'program', which each contain a list of their corresponding rook locations
+            in chess notation
+        '''
+        rook_coordinates = {
+            'user': [],
+            'program': []
+        }
+
+        for idx, row in enumerate(self._rows):
+            if row:
+                rook_coordinates[row[1]].append(Board._pair_to_chess((row[0], idx)))
+
+        if len(rook_coordinates['user']) == 0:
+            rook_coordinates['user'] = ['None']
+        if len(rook_coordinates['program']) == 0:
+            rook_coordinates['program'] = ['None']
+
+        return rook_coordinates
+
     @staticmethod
     def _check_rook_placement_valid(rook_positions: list, nrow: int = 8, ncol: int = 8) -> bool:
         '''
@@ -160,29 +183,6 @@ class Board():
             rows_used.add(position[1])
         
         return True
-
-    def _get_friendly_coordinates(self):
-        '''
-        Obtain coordinates of user and program placed rooks.
-
-        :return: Map containing two keys, 'user' and 'program', which each contain a list of their corresponding rook locations
-            in chess notation
-        '''
-        rook_coordinates = {
-            'user': [],
-            'program': []
-        }
-
-        for idx, row in enumerate(self._rows):
-            if row:
-                rook_coordinates[row[1]].append(Board._pair_to_chess((row[0], idx)))
-
-        if len(rook_coordinates['user']) == 0:
-            rook_coordinates['user'] = ['None']
-        if len(rook_coordinates['program']) == 0:
-            rook_coordinates['program'] = ['None']
-
-        return rook_coordinates
 
     @staticmethod
     def _chess_to_pair(chess_square: str) -> tuple:
