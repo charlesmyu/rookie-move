@@ -14,17 +14,21 @@ class Board():
             free_cols: queue representing all columns not currently occupied by a rook
             ncol: number of columns on board
 
-        :param initial_rooks: initial placement of rooks represented as a list of tuples that are ordered 
-            pairs (col, row), indexed by 0 from bottom left. Placements must not collide.
+        :param initial_rooks: initial placement of rooks represented as a list of tuples in chess notation. Placements must not collide.
         :param nrow: number of rows on chessboard. Defaults to 8.
         :param ncol: number of columns on chessboard. Defaults to 8.
         :param algo: 'algorithm' in which new rooks will be placed. Either 'random' or 'ordered'. Defaults to 'random'.
         '''
-        if nrow <= 0 or ncol <= 0:
+        if nrow <= 0 or ncol <= 0 or ncol > 26:
             raise ValueError('Invalid number of rows or columns detected!')
         if not algo in ['random', 'ordered']:
             raise ValueError('Specified algorithm not valid')
-        if not Board._check_rook_placement_valid(initial_rooks, nrow, ncol):
+
+        ordered_pairs = []
+        for location in initial_rooks:
+            ordered_pairs.append(Board._chess_to_pair(location))
+
+        if not Board._check_rook_placement_valid(ordered_pairs, nrow, ncol):
             raise ValueError('Rook placement invalid!')
 
         # Declare instance variables if all check out
@@ -33,8 +37,8 @@ class Board():
         self._free_cols = list(range(ncol))
         self._ncol = ncol
 
-        # Add initial_rooks into instance variables, remove from queues
-        for position in initial_rooks:
+        # Add ordered_pairs into instance variables, remove from queues
+        for position in ordered_pairs:
             self._rows[position[1]] = (position[0], 'user')
             self._free_rows.remove(position[1])
             self._free_cols.remove(position[0])
@@ -103,26 +107,27 @@ class Board():
         '''
         return min(len(self._free_rows), len(self._free_cols))
 
-    def get_rook_positions(self) -> list:
+    def _get_rook_positions(self) -> list:
         '''
         Returns positions of rooks in a list representing each column, with information about whether user or program added rook.
+        Primarily for testing purposes.
 
         :return: Ordered list of tuples, (rook_col, rook_source), where index denotes row position of rook, rook_col denotes
             column position of rook, and rook_source denotes whether user or program added rook 
         '''
         return self._rows
 
-    def get_free_rows(self) -> list:
+    def _get_free_rows(self) -> list:
         '''
-        Returns all rows that are not currently occupied by rooks.
+        Returns all rows that are not currently occupied by rooks. Primarily for testing purposes.
 
         :return: Queue with all rows that a rook is not currently occupying
         '''
         return self._free_rows
 
-    def get_free_cols(self) -> list:
+    def _get_free_cols(self) -> list:
         '''
-        Returns all columns that are not currently occupied by rooks.
+        Returns all columns that are not currently occupied by rooks. Primarily for testing purposes.
 
         :return: Queue with all columns that a rook is not currently occupying
         '''
@@ -158,10 +163,10 @@ class Board():
 
     def _get_friendly_coordinates(self):
         '''
-        Obtain coordinates of user and program placed rooks, and return in lists of ordered pairs.
+        Obtain coordinates of user and program placed rooks.
 
-        :return: Map containing two keys, 'user' and 'program', which each contain a list of their corresponding ordered pairs
-            representing the location of their rooks
+        :return: Map containing two keys, 'user' and 'program', which each contain a list of their corresponding rook locations
+            in chess notation
         '''
         rook_coordinates = {
             'user': [],
@@ -170,7 +175,7 @@ class Board():
 
         for idx, row in enumerate(self._rows):
             if row:
-                rook_coordinates[row[1]].append((row[0], idx))
+                rook_coordinates[row[1]].append(Board._pair_to_chess((row[0], idx)))
 
         if len(rook_coordinates['user']) == 0:
             rook_coordinates['user'] = ['None']
@@ -178,4 +183,18 @@ class Board():
             rook_coordinates['program'] = ['None']
 
         return rook_coordinates
+
+    @staticmethod
+    def _chess_to_pair(chess_square: str) -> tuple:
+        col = ord(chess_square[0]) - 97
+        row = int(chess_square[1:]) - 1
+
+        return (col, row)
+
+    @staticmethod
+    def _pair_to_chess(ordered_pair: tuple) -> str:
+        col = chr(ordered_pair[0] + 97)
+        row = ordered_pair[1] + 1
+
+        return str(col) + str(row)
 
