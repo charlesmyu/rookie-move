@@ -6,9 +6,10 @@ class Board():
         Initializes an object that represents a chess board. 
         
         Three private instance variables are created:
-            rows: array representing each row of the chess board, where the absolute value represents the rook's 
-                column-wise position. If value is None, no rook is placed at that row. If value is positive, rook 
-                placed by program. If value is negative, rook placed by user on initialization.
+            rows: array representing each row of the chess board, where the value is a tuple representing the rook's column-
+                wise position and source of placement (col, placement). Placement value can either be 'program' or 'user', 
+                depending on whether the program generated the rook's placement, or if the user added the rook on initialization.
+                If no rook at row, value is None. 
             free_rows: queue representing all rows not currently occupied by a rook
             free_cols: queue representing all columns not currently occupied by a rook
 
@@ -32,7 +33,7 @@ class Board():
 
         # Add initial_rooks into instance variables, remove from queues
         for position in initial_rooks:
-            self._rows[position[1]] = -position[0]
+            self._rows[position[1]] = (position[0], 'user')
             self._free_rows.remove(position[1])
             self._free_cols.remove(position[0])
 
@@ -40,13 +41,46 @@ class Board():
             random.shuffle(self._free_rows)
             random.shuffle(self._free_cols)
 
+    def generate_rook(self) -> bool:
+        '''
+        Generates a new rook on board object that does not collide with any other rook. Implemented to be in constant time
+        to allow for rapid generation if necessary.
+
+        :return: bool representing success of request. True if rook successfully generated, false if rook cannot be generated.
+        '''
+        if len(self._free_rows) == 0 or len(self._free_cols) == 0:
+            return False
+
+        rook_row = self._free_rows.pop()
+        rook_col = self._free_cols.pop()
+
+        self._rows[rook_row] = (rook_col, 'program')
+
+        return True
+
     def get_rook_positions(self) -> list:
+        '''
+        Returns positions of rooks in a list representing each column, with information about whether user or program added rook.
+
+        :return: Ordered list of tuples, (rook_col, rook_source), where index denotes row position of rook, rook_col denotes
+            column position of rook, and rook_source denotes whether user or program added rook 
+        '''
         return self._rows
 
     def get_free_rows(self) -> list:
+        '''
+        Returns all rows that are not currently occupied by rooks.
+
+        :return: Queue with all rows that a rook is not currently occupying
+        '''
         return self._free_rows
 
     def get_free_cols(self) -> list:
+        '''
+        Returns all columns that are not currently occupied by rooks.
+
+        :return: Queue with all columns that a rook is not currently occupying
+        '''
         return self._free_cols
 
     @staticmethod
