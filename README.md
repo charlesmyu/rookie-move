@@ -3,10 +3,10 @@ Rookie Move takes a chess board with random rooks placed on it, and places more 
 
 ## Getting Started 
 1. Make sure you are in the `rookie-move` directory
-2. Run the interactive program by using `py rookie-move.py` on Windows, or `python rookie-move.py` on Unix
-3. Follow the instructions and have fun!
+2. Run the interactive program by using `py rookie-move.py` on Windows. On Unix, try `python rookie-move.py` or `./rookie-move.py`. (Depending on how you installed Python, you may have to specify `python3` instead of just `python`)
+3. Follow the instructions displayed and have fun!
 
-If you would like to use the program using arguments, run Rookie Move by using `py rookie-move.py <initial position> ...` where `<initial position>` is a number of initial positions for rooks in chess notation. For example, one could run `py rookie-move.py a1 b2 c3`, which would place rooks initially at `a1`, `b2`, and `c3`. The program will then populate as many rooks as it can fit without having any that collide.
+If you would like to use the program using arguments instead, run Rookie Move by using `py rookie-move.py <initial position> ...` where `<initial position>` is a number of initial positions for rooks in chess notation. For example, one could run `py rookie-move.py a1 b2 c3`, which would place rooks initially at `a1`, `b2`, and `c3`. The program will then populate as many rooks as it can fit without any collisions.
 
 ### Sample Input/Output
 Input: `py rookie-move.py a6 d2 h5`  
@@ -86,7 +86,7 @@ Goodbye!
 ```
 
 ## Unit Testing
-All unit tests reside in `test_board.py`. To run tests, use `py -m unittest` (or `python -m unittest` on Unix). 
+All unit tests reside in `test_board.py`. To run tests, use `py -m unittest` (or `python -m unittest` on Unix). Depending on how you installed Python, you may have to specify `python3` instead of just `python` (this program is written in Python 3).
 
 ## Design Decisions
 I approached this problem trying to keep scalability and performance at top of mind. In this case, I took scalability to be a potential increase in board size (and thus number of rooks placed).  
