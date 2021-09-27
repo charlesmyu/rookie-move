@@ -85,8 +85,8 @@ Press enter to generate a new rook! Input "e" to exit.
 Goodbye!
 ```
 
-## Testing
-All tests reside in `test_board.py`. To run tests, use `py -m unittest` (or `python -m unittest` on Unix). 
+## Unit Testing
+All unit tests reside in `test_board.py`. To run tests, use `py -m unittest` (or `python -m unittest` on Unix). 
 
 ## Design Decisions
 I approached this problem trying to keep scalability and performance at top of mind. In this case, I took scalability to be a potential increase in board size (and thus number of rooks placed).  
