@@ -6,7 +6,84 @@ Rookie Move takes a chess board with random rooks placed on it, and places more 
 2. Run the interactive program by using `py rookie-move.py` on Windows, or `python rookie-move.py` on Unix
 3. Follow the instructions and have fun!
 
-If you would like to use the program using arguments, run Rookie Move by using `py rookie-move.py <initial position> ...` where `<initial position>` is a number of initial positions for rooks in chess notation. For example, one could run `py rookie-move.py a1 b2 c3`, which would place rooks initially at `a1`, `b2`, and `c3`. Make sure these are not colliding!
+If you would like to use the program using arguments, run Rookie Move by using `py rookie-move.py <initial position> ...` where `<initial position>` is a number of initial positions for rooks in chess notation. For example, one could run `py rookie-move.py a1 b2 c3`, which would place rooks initially at `a1`, `b2`, and `c3`. The program will then populate as many rooks as it can fit without having any that collide.
+
+### Sample Input/Output
+Input: `py rookie-move.py a6 d2 h5`  
+Output: 
+```
+✯ ----------------✯  
+| · · · · · · ♖ · |  
+| · · ♖ · · · · · |  
+| ♜ · · · · · · · |  
+| · · · · · · · ♜ |  
+| · · · ♖ · · · · |  
+| · · · · · ♖ · · |  
+| · ♜ · · · · · · |  
+| · · · · ♖ · · · |  
+✯ ----------------✯  
+
+User Initialized Rooks (White): b2, h5, a6
+Program Generated Rooks (Black): e1, f3, d4, c7, g8
+```
+
+Input: `py rookie-move.py`  
+Output:
+```
+Welcome to ♜-ie Move!
+
+Please initialize your rooks. Enter them in chess notation, separated by spaces (e.g. a1 b2 c3):
+
+>> a6 d2 h5
+
+Please enter your choice of algorithm:
+1) Random (Default)
+2) Ordered
+
+>> 1
+
+Random algorithm selected!
+
+
+✯ ----------------✯
+| · · · · · · · ·  |
+| · · · · · · · ·  |
+| ♜ · · · · · · · |
+| · · · · · · · ♜ |
+| · · · · · · · ·  |
+| · · · · · · · ·  |
+| · · · ♜ · · · · |
+| · · · · · · · ·  |
+✯ ----------------✯
+
+User Initialized Rooks (White): d2, h5, a6
+Program Generated Rooks (Black): None
+
+Press enter to generate a new rook! Input "e" to exit.
+
+>> <enter>
+
+
+✯ ----------------✯
+| · · · · · · · ·  |
+| · · · · ♖ · · · |
+| ♜ · · · · · · · |
+| · · · · · · · ♜ |
+| · · · · · · · ·  |
+| · · · · · · · ·  |
+| · · · ♜ · · · · |
+| · · · · · · · ·  |
+✯ ----------------✯
+
+User Initialized Rooks (White): d2, h5, a6
+Program Generated Rooks (Black): e7
+
+Press enter to generate a new rook! Input "e" to exit.
+
+>> e
+
+Goodbye!
+```
 
 ## Testing
 All tests reside in `test_board.py`. To run tests, use `py -m unittest` (or `python -m unittest` on Unix). 
